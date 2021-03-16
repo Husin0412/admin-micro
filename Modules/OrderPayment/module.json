@@ -1,0 +1,13 @@
+{
+    "name": "OrderPayment",
+    "alias": "orderpayment",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\OrderPayment\\Providers\\OrderPaymentServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

@@ -21,11 +21,11 @@
                     #
                     @endif
                 </th>
+                <th style="" class="text-white">Avatar</th>
                 <th style="" class="text-white">Name</th>
                 <th style="" class="text-white">Email</th>
                 <th style="" class="text-white">Role</th>
                 <th style="" class="text-white">Profession</th>
-                <th style="" class="text-white">Avatar</th>
                 <th style="" class="text-white">Join Date</th>
             </tr>
         </thead>
@@ -46,11 +46,11 @@
                     {{$no++}}
                     @endif
                 </td>
+                <td class=""><img src="{{$val['avatar']}}" alt=""></td>
                 <td> {{$val['name']}} </td>
                 <td> {{$val['email']}} </td>
                 <td class=""> <span class="badge badge-secondary">{{$val['role']}}</span></td>
                 <td class="">{{$val['profession']}}</td>
-                <td class=""><img src="{{$val['avatar']}}" alt=""></td>
                 <td class="">{{$val['created_at']}}</td>
             </tr>
             @endforeach

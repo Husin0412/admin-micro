@@ -7,6 +7,8 @@ use App\Http\Controllers\Dashboard\DashboarController;
 use App\Http\Controllers\Master\UserGroupController;
 use App\Http\Controllers\Master\UserController;
 use App\Http\Controllers\Master\StudentController;
+// use Modules\ServiceCourse\Http\Controllers\MentorsController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -52,7 +54,39 @@ Route::group(['middleware' => 'auth_user'], function () {
         Route::get('/', [StudentController::class, 'index']);
         Route::post('/details', [StudentController::class, 'details']);
     });
-
+    
 });
 
+/**/
+Route::namespace('\Modules\ServiceCourse\Http\Controllers')->middleware('auth_user')->group(function() {
+    route::prefix('/mentors')->group(function() {
+        Route::get('/', 'MentorsController@index');
+        Route::get('/add', 'MentorsController@add');
+        Route::post('/save', 'MentorsController@save');
+        Route::match(['get','post'], '/edit', 'MentorsController@edit');
+        Route::post('/update', 'MentorsController@update');
+        Route::post('/delete', 'MentorsController@delete');
+    });
+
+    route::prefix('/courses')->group(function() {
+        Route::get('/', 'CoursesController@index');
+        Route::get('/add', 'CoursesController@add');
+        Route::post('/save', 'CoursesController@save');
+        Route::match(['get','post'], '/edit', 'CoursesController@edit');
+        Route::post('/update', 'CoursesController@update');
+        Route::post('/delete', 'CoursesController@delete');
+        /*course image*/
+        Route::get('/image', 'CoursesController@addImage');
+        Route::post('/saveImage', 'CoursesController@saveImage');
+    });
+
+    route::prefix('/chapters')->group(function() {
+        Route::get('/', 'ChaptersController@index');
+        Route::get('/add', 'ChaptersController@add');
+        Route::post('/save', 'ChaptersController@save');
+        Route::match(['get','post'], '/edit', 'ChaptersController@edit');
+        Route::post('/update', 'ChaptersController@update');
+        Route::post('/delete', 'ChaptersController@delete');
+    });
+});
 

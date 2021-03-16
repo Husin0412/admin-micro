@@ -19,6 +19,9 @@
     <link rel="stylesheet" href="{{ asset('assets/css/custome.css') }}">
     <!-- datatable css -->
     <link rel="stylesheet" href="{{ asset('assets/css/datatable.css') }}">
+    <!-- wysihtml5 css -->
+    <link rel="stylesheet" href="{{ asset('assets/wysihtml5/css/bootstrap-wysihtml5-0.0.2.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/wysihtml5/css/wysihtml5.css') }}">
     <!-- endinject -->
     <!-- plugin css for this page -->
     <!-- End plugin css for this page -->
@@ -34,6 +37,7 @@
 </head>
 
 <div id="loading"></div>
+
 <body>
     <div class="container-scroller">
         <!-- _navbar -->
@@ -45,9 +49,16 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row w-100">
-                            <div class="col-lg-6">
+                            <div
+                                class="@if(($page->fetch_role('create', $module) == true) && (isset($toolbar_image) && $toolbar_image === true)) col-lg-1 @else col-lg-6 @endif">
                                 <h4 class="card-title"> @if(isset($page_title)) {{ $page_title }} @endif</h4>
                             </div>
+                            @if(($page->fetch_role('create', $module) == true) && (isset($toolbar_image) &&
+                            $toolbar_image === true))
+                            <div class="col-lg-5">
+                                <a href="{{$module->permalink.'/image'}}" class="btn btn-outline-info btn-sm">Image</a>
+                            </div>
+                            @endif
                             <div class="col-lg-6 p-0 m-0">
                                 @include('layout.'.config('layout.app_name').'.partials.action.index')
                             </div>
@@ -77,19 +88,25 @@
     <script src="{{ asset('assets/js/shared/off-canvas.js') }}"></script>
     <script src="{{ asset('assets/js/shared/misc.js') }}"></script>
     <!-- endinject -->
-    <!-- Custom js for this page-->
-    <script src="{{ asset('assets/js/demo_1/dashboard.js') }}"></script>
     <!-- End custom js for this page-->
     <!-- <script src="{{ asset('assets/js/shared/jquery.cookie.js') }}" type="text/javascript"></script> -->
-    <!-- custome -->
+    <!-- Custom js for this page-->
+    <script src="{{ asset('assets/js/demo_1/dashboard.js') }}"></script>
+    <!-- pnotify -->
     <script src="{{ asset('assets/js/notify/pnotify.js') }}"></script>
-    <!-- custome -->
-    <script src="{{ asset('assets/js/custome.js') }}"></script>
     <!-- datatable -->
     <script src="{{ asset('assets/js/datatable.js') }}"></script>
+    <!-- wysihtml5 -->
+    <script src="{{ asset('assets/wysihtml5/js/bootstrap-wysihtml5-0.0.2.js') }}"></script>
+    <script src="{{ asset('assets/wysihtml5/js/wysihtml5-0.3.0_rc2.js') }}"></script>
+    <script src="{{ asset('assets/wysihtml5/js/wysihtml.js') }}"></script>
+    <!-- custome -->
+    <script src="{{ asset('assets/js/price_pormat.js') }}"></script>
+    <script src="{{ asset('assets/js/custome.js') }}"></script>
     <script>
     $(document).ready(function() {
         $('.data-table').DataTable()
+        $(".progress-bar").loading();
     })
     </script>
     @yield('content_script')

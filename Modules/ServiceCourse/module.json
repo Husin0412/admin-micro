@@ -1,0 +1,13 @@
+{
+    "name": "ServiceCourse",
+    "alias": "servicecourse",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ServiceCourse\\Providers\\ServiceCourseServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

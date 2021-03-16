@@ -1,6 +1,7 @@
 @extends('layout.'.config('layout.app_name').'.app')
 
 @section('content_body')
+
 <div class="content-wrapper">
     <!-- Page Title Header Starts-->
     <div class="row page-title-header">
@@ -590,7 +591,7 @@
 @section('content_script')
 <script>
 $(document).ready(function() {
-    
+
 })
 </script>
 @endsection

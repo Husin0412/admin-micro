@@ -241,7 +241,7 @@ class UserController extends Controller
         {
             $name_exist = $user_exist['name'] > 0 ? 'Name '.ucwords($request->input('name')).' already exists' : null;
             $email_exist = $user_exist['email'] > 0 ? 'Email '.$request->input('email').' already exists' : null;
-            return \redirect($this->module->permalink.'/add')
+            return \redirect($this->module->permalink.'/edit')
                 ->with(['name_exist' => $name_exist, 'email_exist' => $email_exist])
                 ->withInput();
         }

@@ -26,7 +26,7 @@ class ModuleSeeder extends Seeder
                 'published' => 'y'
             ],
             [
-                'modid' => 3,
+                'modid' => 10,
                 'parent_id' => 1,
                 'mod_name' => 'User Group',
                 'mod_alias' => 'user-group',
@@ -78,11 +78,41 @@ class ModuleSeeder extends Seeder
             [
                 'modid' => 4,
                 'parent_id' => 2,
-                'mod_name' => 'Test',
-                'mod_alias' => 'test-test',
-                'mod_permalink' => '/test/test',
+                'mod_name' => 'Courses',
+                'mod_alias' => 'courses',
+                'mod_permalink' => '/courses',
                 'mod_icon' => null,
                 'mod_order' => 2,
+                'published' => 'y'
+            ],
+            [
+                'modid' => 8,
+                'parent_id' => 2,
+                'mod_name' => 'Chapters',
+                'mod_alias' => 'chapters',
+                'mod_permalink' => '/chapters',
+                'mod_icon' => null,
+                'mod_order' => 3,
+                'published' => 'y'
+            ],
+            [
+                'modid' => 9,
+                'parent_id' => 2,
+                'mod_name' => 'Lessons',
+                'mod_alias' => 'lessons',
+                'mod_permalink' => '/lessons',
+                'mod_icon' => null,
+                'mod_order' => 4,
+                'published' => 'y'
+            ],
+            [
+                'modid' => 3,
+                'parent_id' => 0,
+                'mod_name' => 'Summary',
+                'mod_alias' => 'summary',
+                'mod_permalink' => null,
+                'mod_icon' => 'mdi mdi-receipt',
+                'mod_order' => 1,
                 'published' => 'y'
             ],
         ]);

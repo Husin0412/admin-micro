@@ -23,13 +23,37 @@ $(document).ready(function() {
         btn = $('.btn-confirm-modal');
         if(type === "danger") {
             btn.addClass('btn-danger');
-            btn.text('Agree')
+            $('.aggre').remove()
+            $('.spinner-container').remove()
+            btn.append('<span class="aggre">Aggre</span>')
+            $('.btn-cancel-modal').text('Close')
         }
 
         btn.click(function() {
-            if(url === 'logout') {
-                window.location.href='/logout'
-            }
+            $('.aggre').remove()
+            $('.spinner-container').remove()
+            $('.btn-cancel-modal').text('Cancel')
+            btn.append('<div class="spinner-container"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> <span class="text-status ml-2"></span> </div>')
+            var timeleft = 5;
+            var time = 0;
+            var downloadTimer = setInterval(function(){
+            //   document.getElementById("progressBar").value =
+                var waktu = timeleft - time ;
+                time += 1;
+                $('.text-status').text(waktu)
+                if(waktu <= 0){
+                    clearInterval(downloadTimer);
+                    $('.spinner-border').css({'animation': 'spinner-border 1 linear infinite'});
+                }
+                if(waktu <= 1){
+                    if(url === 'logout') {
+                        window.location.href="/"+url+""
+                    }
+                }
+            }, 1000);
+            $('.btn-cancel-modal').click(function() {
+                clearInterval(downloadTimer);
+            })
         })
         
     })
@@ -193,3 +217,11 @@ $('.input-group-append').click(function(e) {
         input.attr('type', 'password')
     }
 })
+
+/* pormat number */
+$('.price-input-Rp').priceFormat({
+    prefix: 'Rp ',
+    centsSeparator: '.',
+    thousandsSeparator: ',',
+    centsLimit:2
+}); 

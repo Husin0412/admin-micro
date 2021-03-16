@@ -76,7 +76,7 @@ class LoginController extends Controller
                     }
                 }
     
-                return \redirect()->back()->with('error', $response->message);
+                return \redirect()->back()->with('error', $response->message)->withInput();
             }
         }
         return \view('authentication.login');

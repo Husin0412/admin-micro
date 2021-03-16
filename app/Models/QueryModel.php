@@ -38,22 +38,147 @@ class QueryModel extends Model
             abort($get_user['http_code'], $get_user['message']);
             // return \redirect()->route('500', ['response' => 'error', 'error_code' => $get_user['http_code'], 'message' => $get_user['message']]);
         } 
-        
-        $key_name = 'name'; $key_email = 'email'; $val_name = $name; $val_email = $email;
-        if($id) { $key_name = 'id'; $key_email = 'id'; $val_name = $id; $val_email = $id; }
 
         $_name = []; $_email = [];
-        foreach($get_user['data'] as $key => $val) {
-            if($val['name'] === $name && $val[$key_name] != $val_name) {
-               array_push($_name, $val['id']);
-            } 
-            if($val['email'] === $email && $val[$key_email] != $val_email) {
-                array_push($_email, $val['id']);
+
+        if($id) 
+        {
+            foreach($get_user['data'] as $key => $val) {
+                if($val['name'] === $name && $val['id'] != $id) {
+                   array_push($_name, $val['id']);
+                } 
+                if($val['email'] === $email && $val['id'] != $id) {
+                    array_push($_email, $val['id']);
+                }
             }
         }
+        else
+        {
+            foreach($get_user['data'] as $key => $val) {
+                if($val['name'] === $name) {
+                   array_push($_name, $val['id']);
+                } 
+                if($val['email'] === $email) {
+                    array_push($_email, $val['id']);
+                }
+            }
+        }
+
         $__name = count($_name);
         $__email = count($_email);
         $response = ['name' => $__name,'email' => $__email];
+
+        return $response;
+    }
+
+    public function get_mentor_exist($name = '', $email = '', $id = null)
+    {
+        $get_mentor = get_mentors(session('user_token'));
+        
+        if($get_mentor['status'] === "error")
+        {
+            abort($get_mentor['http_code'], $get_mentor['message']);
+            // return \redirect()->route('500', ['response' => 'error', 'error_code' => $get_mentor['http_code'], 'message' => $get_mentor['message']]);
+        } 
+
+        $_name = []; $_email = [];
+
+        if($id) 
+        {
+            foreach($get_mentor['data'] as $key => $val) {
+                if($val['name'] === $name && $val['id'] != $id) {
+                   array_push($_name, $val['id']);
+                } 
+                if($val['email'] === $email && $val['id'] != $id) {
+                    array_push($_email, $val['id']);
+                }
+            }
+        }
+        else
+        {
+            foreach($get_mentor['data'] as $key => $val) {
+                if($val['name'] === $name) {
+                   array_push($_name, $val['id']);
+                } 
+                if($val['email'] === $email) {
+                    array_push($_email, $val['id']);
+                }
+            }
+        }
+
+        $__name = count($_name);
+        $__email = count($_email);
+        $response = ['name' => $__name,'email' => $__email];
+
+        return $response;
+    }
+
+    function courses_exist($name = '', $id = null)
+    {
+        $get_course = get_courses(session('user_token'));
+        
+        if($get_course['status'] === "error")
+        {
+            abort($get_course['http_code'], $get_course['message']);
+            // return \redirect()->route('500', ['response' => 'error', 'error_code' => $get_mentor['http_code'], 'message' => $get_mentor['message']]);
+        } 
+
+        $_name = [];
+        // dd($get_course['data']['data']);
+        if($id) 
+        {
+            foreach($get_course['data'] as $key => $val) {
+                if($val['name'] === $name && $val['id'] != $id) {
+                   array_push($_name, $val['id']);
+                } 
+            }
+        }
+        else
+        {
+            foreach($get_course['data'] as $key => $val) {
+                if($val['name'] === $name) {
+                   array_push($_name, $val['id']);
+                } 
+            }
+        }
+
+        $__name = count($_name);
+        $response = ['name' => $__name];
+
+        return $response;
+    }
+
+    function chapter_exist($name = '', $courseId = null, $id = null)
+    {
+        $get_chapters = get_chapters(session('user_token'), ['course_id' => $courseId]);
+
+        if($get_chapters['status'] === "error")
+        {
+            abort($get_chapters['http_code'], $get_chapters['message']);
+            // return \redirect()->route('500', ['response' => 'error', 'error_code' => $get_mentor['http_code'], 'message' => $get_mentor['message']]);
+        } 
+
+        $_name = [];
+        // dd($get_chapters['data']['data']);
+        if($id) 
+        {
+            foreach($get_chapters['data'] as $key => $val) {
+                if($val['name'] === $name && $val['id'] != $id) {
+                   array_push($_name, $val['id']);
+                } 
+            }
+        }
+        else
+        {
+            foreach($get_chapters['data'] as $key => $val) {
+                if($val['name'] === $name) {
+                   array_push($_name, $val['id']);
+                } 
+            }
+        }
+
+        $__name = count($_name);
+        $response = ['name' => $__name];
 
         return $response;
     }

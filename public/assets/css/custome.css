@@ -30,15 +30,16 @@
 .label-child::before{ content: '-- '; }
 .div-parent{margin-top: 48px;}
 .required::before{content: "* "; color: red;}
-.error-input {border-style: solid !important; border-color: orangered !important;}
+.error-input { border: 1px solid orangered !important;}
 .alert-primary-custome {color: white !important; background-color: #5161bd !important;border-color: #ffffff !important;}
 .text-white-custome {color: white !important;}
 .div-child{padding-top: 10px;}
 
 .parent-mdi {position: relative !important;}
-.eye-mdi {
-	position: absolute !important;
-    top: 4px;
-    right: 20px;
-	cursor: pointer;
-}
+.eye-mdi {position: absolute !important;top: 4px;right: 20px;cursor: pointer;}
+.dropdown-menu .dropdown-item:hover { background-color: #2196f3 !important; color: white !important;}
+.hover-pointer:hover.plus { cursor: pointer; color: #19d895; }
+.hover-pointer:hover.minus { cursor: pointer; color: rgb(233, 24, 24); }
+.hover-pointer:hover { cursor: pointer; }
+
+
