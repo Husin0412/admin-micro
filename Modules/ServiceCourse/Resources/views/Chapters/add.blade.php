@@ -117,14 +117,14 @@ $(document).ready(function() {
         /*old*/
         @if(old('course_id'))
         @php
-        $_mentor = detail_chapters(session('user_token'), old('course_id'));
-        if ($_mentor['status'] === "success") {
-            $mentor = $_mentor['data'];
+        $_course = detail_courses(session('user_token'), old('course_id'));
+        if ($_course['status'] === "success") {
+            $course = $_course['data'];
         }
         @endphp
-        $(dropdown).find('.dropdown-parent').text('{{$mentor["name"]}}');
+        $(dropdown).find('.dropdown-parent').text('{{$course["name"]}}');
         $(dropdown).find('.dropdown-parent').append(
-            '<input type="hidden" name="course_id" value="{{$mentor["id"]}}"/>');
+            '<input type="hidden" name="course_id" value="{{$course["id"]}}"/>');
         @endif
     });
 

@@ -183,4 +183,39 @@ class QueryModel extends Model
         return $response;
     }
 
+    function lesson_exist($name = '', $chapterId = null, $id = null)
+    {
+        $get_lessons = get_lessons(session('user_token'), $chapterId);
+
+        if($get_lessons['status'] === "error")
+        {
+            abort($get_lessons['http_code'], $get_lessons['message']);
+            // return \redirect()->route('500', ['response' => 'error', 'error_code' => $get_mentor['http_code'], 'message' => $get_mentor['message']]);
+        } 
+
+        $_name = [];
+        // dd($get_lessons['data']['data']);
+        if($id) 
+        {
+            foreach($get_lessons['data'] as $key => $val) {
+                if($val['name'] === $name && $val['id'] != $id) {
+                   array_push($_name, $val['id']);
+                } 
+            }
+        }
+        else
+        {
+            foreach($get_lessons['data'] as $key => $val) {
+                if($val['name'] === $name) {
+                   array_push($_name, $val['id']);
+                } 
+            }
+        }
+
+        $__name = count($_name);
+        $response = ['name' => $__name];
+
+        return $response;
+    }
+
 } 

@@ -8,30 +8,26 @@
 <div class="col-12 grid-margin">
     <div class="card">
         <div class="card-body">
-            <form class="form-sample" action="{{ $module->permalink.'/saveImage' }}" id="form-table" method="post"
+            <form class="form-sample" action="{{ $module->permalink.'/save' }}" id="form-table" method="post"
                 autocomplete="off" novalidate="novalidate" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Image</label>
-                            <div class="col-sm-1">
-                                <i class="mdi mdi-minus hover-pointer minus"></i>
-                                <i class="mdi mdi-plus hover-pointer plus"></i>
-                            </div>
+                            <label class="col-sm-3 col-form-label required">Name</label>
                             <div class="col-sm-9">
-                                <div class="custom-file mb-3  @error('image') error-input @enderror">
-                                    <input type="file" class="custom-file-input"
-                                        id="customFile" name="image[]">
-                                    <label class="custom-file-label" for="customFile">Choose file</label>
-                                </div>
-                                @error('image') {!! required_field($message) !!} @enderror
+                                <input type="text"
+                                    class="form-control @error('name') error-input @enderror @if(Session::has('name_exist') && !empty(Session::get('name_exist'))) error-input @endif"
+                                    name="name" value="{{ old('name') ?: ''}}">
+                                @if(Session::has('name_exist') && !empty(Session::get('name_exist'))) {!!
+                                required_field(Session::get('name_exist')) !!} @endif
+                                @error('name') {!! required_field($message) !!} @enderror
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Courses</label>
+                            <label class="col-sm-3 col-form-label required">Courses</label>
                             <div class="col-sm-9">
                                 <div class="dropdown text-capitalize">
                                     <button
@@ -55,7 +51,29 @@
                         </div>
                     </div>
                 </div>
-                <div class="parent-select"> </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label required">Video</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="video" class="form-control @error('video') error-input @enderror" value="{{old('video')}}" >
+                                @error('video') {!! required_field($message) !!} @enderror
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label required">Chapter</label>
+                            <div class="col-sm-9">
+                                <select class="form-control @error('chapter_id') error-input @enderror text-capitalize"
+                                    name="chapter_id" id="select-chapter">
+                                    <option value="" id="primary-option">select chapter</option>
+                                </select>
+                                @error('chapter_id') {!! required_field($message) !!} @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -90,7 +108,7 @@ $(document).ready(function() {
                             $('.dropdown_empty').remove()
                             $('.dropdown-menu').append(
                                 '<div class="dropdown-header dropdown_empty">No entry found </div>'
-                            )
+                                )
                         }
                         $('.dropdown-item').remove()
                         for (i = 0; i < resp.data.length; i++) {
@@ -115,6 +133,30 @@ $(document).ready(function() {
                 '<input type="hidden" name="course_id" value="' + $(this)[0].dataset.id +
                 '"/>');
             $(dropdown).find('.dropdown-parent').dropdown('toggle');
+            var course_ids = $(this)[0].dataset.id;
+            /*added chapter*/ 
+            $.ajax({
+                    type: "get",
+                    url: '{{env('SERVICE_GATEWAY_URL')}}' + 'chapters',
+                    headers: {
+                        "Authorization": '{{session("user_token")}}'
+                    },
+                    data: { course_id: $(this)[0].dataset.id },
+                    cache: false,
+                    success: function(resp) {
+                        if(resp.data.length > 0) {
+                            $('.item-option').remove()
+                            $('#primary-option').html("select chapter")
+                            resp.data.map(function(item, index) {
+                                $('#select-chapter').append('<option class="item-option" value="'+item.id+'">'+item.name+'</option>')
+                            })
+                        } else {
+                           $('.item-option').remove()
+                           $('#primary-option').html("the chapter is still empty")
+                        }
+                    },
+                    error: function(err) { console.log("error", err) }
+                })
         })
 
         /*old*/
@@ -132,46 +174,5 @@ $(document).ready(function() {
     });
 
 });
-</script>
-
-<script>
-// Add the following code if you want the name of the file appear on select
-$(".custom-file-input").on("change", function() {
-    var fileName = $(this).val().split("\\").pop();
-    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-});
-
-function imageSelect(e) {
-    var fileName = e.value.split("\\").pop();
-    var id = e.id.split("_").pop()
-    $("#customFiles_" + id).addClass("selected").html(fileName);
-}
-
-/*--*/
-$(".hover-pointer.plus").on("click", function(e) {
-    var l = $('.added-item').length
-    var key = generateHexString(6);
-    if (l < 9) {
-        var fieldHtml =
-            '<div class="row added-item"> <div class="col-md-6"> <div class="form-group row"> <label class="col-sm-3 col-form-label">Image</label> <div class="col-sm-9"> <div class="custom-file mb-3"> <input type="file" class="custom-file-input_' +
-            key + '" data-id="customFile_' + key + '" id="customFile_' + key +
-            '" name="image[]" onchange="imageSelect(this)"> <label class="custom-file-label" for="customFile_' +
-            key + '" id="customFiles_' + key +
-            '">Choose file</label> </div></div></div></div> <div class="col-md-6"></div> </div>'
-        $(".parent-select").append(fieldHtml)
-    }
-})
-$(".hover-pointer.minus").on("click", function() {
-    $('.added-item').last().remove()
-})
-
-/*--*/
-function generateHexString(length) {
-    var ret = "";
-    while (ret.length < length) {
-        ret += Math.random().toString(16).substring(2);
-    }
-    return ret.substring(0, length);
-}
 </script>
 @endsection

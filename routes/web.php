@@ -78,6 +78,7 @@ Route::namespace('\Modules\ServiceCourse\Http\Controllers')->middleware('auth_us
         /*course image*/
         Route::get('/image', 'CoursesController@addImage');
         Route::post('/saveImage', 'CoursesController@saveImage');
+        Route::delete('/deleteImage', 'CoursesController@deleteImage');
     });
 
     route::prefix('/chapters')->group(function() {
@@ -87,6 +88,15 @@ Route::namespace('\Modules\ServiceCourse\Http\Controllers')->middleware('auth_us
         Route::match(['get','post'], '/edit', 'ChaptersController@edit');
         Route::post('/update', 'ChaptersController@update');
         Route::post('/delete', 'ChaptersController@delete');
+    });
+
+    route::prefix('/lessons')->group(function() {
+        Route::get('/', 'LessonsController@index');
+        Route::get('/add', 'LessonsController@add');
+        Route::post('/save', 'LessonsController@save');
+        Route::match(['get','post'], '/edit', 'LessonsController@edit');
+        Route::post('/update', 'LessonsController@update');
+        Route::post('/delete', 'LessonsController@delete');
     });
 });
 

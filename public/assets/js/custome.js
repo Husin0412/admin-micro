@@ -71,7 +71,39 @@ $('.child-check').click(function(e) { id = e.target.id, $('.child-check').prop('
 
 function radioNetral() {$(".child-check").prop('checked', false);}
 
+/**/
+$('.parent-option').on('change', function(e) { 
+    var selectedId = $(this).children("option:selected").attr('id');
+    var selectedTex = $(this).children("option:selected").text();
 
+    $('.parent-option').removeClass("text-primary")
+    $('.select-chapter').prop('selected', true)
+    $('#'+selectedId).prop('selected', true)
+    $(this).addClass("text-primary")
+    if(selectedTex === "select chapter")
+    {
+        $('.parent-option').removeClass("text-primary")
+    }
+}) 
+
+/**/
+$('.div-video').hover(function(){
+    $(this).children('.div-video-img').attr("src", "assets/images/svg/icon.play.hover.svg")
+    $(this).mouseleave(function(){
+        $(this).children('.div-video-img').attr("src", "assets/images/svg/icon.play.svg")
+    })
+    $(this).click(function() {
+        $('.overlay').remove()
+        var video = $(this).children('span').data('video')
+        var wrapper = '<div class="overlay"> <div class="video-convert"> <iframe id="ytplayer" type="text/html" width="90%" height="100%" src="http://www.youtube.com/embed/'+video+'" frameborder="0" allowfullscreen></iframe> </div> </div>'
+        $('body').append(wrapper)
+        $('.overlay').fadeIn('slow')
+        $('.overlay').css('display','flex')
+    })
+    $('.overlay').click(function() {
+        $(this).fadeOut("slow");
+    })
+}) 
 
 // action
 $('.actions > .btn-add').click(function() {

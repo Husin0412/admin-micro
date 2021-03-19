@@ -314,7 +314,7 @@ function create_courses($token, $request) {
     }
 }
 
-function detail_courses($token, $id) {
+function detail_courses($token, $id = null) {
     $url = env('SERVICE_GATEWAY_URL') . "courses/$id";
 
     try {
@@ -486,6 +486,91 @@ function delete_img_courses($token, $request) {
     }
 } 
 
+/*lessons*/
+function get_lessons($token, $request = null) {
+    $url = env('SERVICE_GATEWAY_URL') . "lessons";
+
+    try {
+        $response = Http::withHeaders(['Authorization' => $token ])->get($url, $request);
+        $data = $response->json();
+        $data['http_code'] = $response->getStatusCode();
+        return $data;
+    } catch (\Throwable $th) {
+        return [
+            'status' => 'error',
+            'http_code' => 500,
+            'message' => 'service lessons unavailable'
+        ];
+    }
+}
+
+function create_lessons($token, $request) {
+    $url = env('SERVICE_GATEWAY_URL') . "lessons";
+
+    try {
+        $response = Http::withHeaders(['Authorization' => $token ])->post($url, $request);
+        $data = $response->json();
+        $data['http_code'] = $response->getStatusCode();
+        return $data;
+    } catch (\Throwable $th) {
+        return [
+            'status' => 'error',
+            'http_code' => 500,
+            'message' => 'service lessons unavailable'
+        ];
+    }
+}
+
+function detail_lessons($token, $id) {
+    $url = env('SERVICE_GATEWAY_URL') . "lessons/$id";
+
+    try {
+        $response = Http::withHeaders(['Authorization' => $token ])->get($url);
+        $data = $response->json();
+        $data['http_code'] = $response->getStatusCode();
+        return $data;
+    } catch (\Throwable $th) {
+        return [
+            'status' => 'error',
+            'http_code' => 500,
+            'message' => 'service lessons unavailable'
+        ];
+    }
+}
+
+function update_lessons($token, $request, $id) {
+    $url = env('SERVICE_GATEWAY_URL') . "lessons/$id";
+
+    try {
+        $response = Http::withHeaders(['Authorization' => $token ])->put($url, $request);
+        $data = $response->json();
+        $data['http_code'] = $response->getStatusCode();
+        return $data;
+    } catch (\Throwable $th) {
+        return [
+            'status' => 'error',
+            'http_code' => 500,
+            'message' => 'service lessons unavailable'
+        ];
+    }
+}
+
+function delete_lessons($token, $id) {
+    $url = env('SERVICE_GATEWAY_URL') . "lessons/$id";
+
+    try {
+        $response = Http::withHeaders([ 'Authorization' => $token ])->delete($url);
+        $data = $response->json();
+        $data['http_code'] = $response->getStatusCode();
+        return $data;
+    } catch (\Throwable $th) {
+        return [
+            'status' => 'error',
+            'http_code' => 500,
+            'message' => 'service lessons unavailable'
+        ];
+    }
+}
 
 
 /* print for required fields */
