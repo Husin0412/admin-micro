@@ -148,21 +148,22 @@ class ChaptersController extends Controller
     {
         $this->page->blocked_page($this->mod_alias,'alter');
 
-        if(!$request->filled('chapter_id') && !session('chapter_id'))
+        $chapter_id = 0;
+        foreach($request->input('chapter_id') as $key => $val)
+        {
+            if(!empty($val))
+            {
+                $chapter_id = (int)$val;
+            }
+        }
+        if($chapter_id < 1 && !session('chapter_id'))
         {
             return redirect($this->module->permalink)->with(['response' => 'error', 'message' => 'Chapter id not found']);
         }
 
         if(!session('chapter_id'))
         {
-            foreach($request->input('chapter_id') as $key => $val)
-            {
-                if(!empty($val))
-                {
-                    $chapter_id = (int)$val;
-                    session(['chapter_id' => $chapter_id]);
-                }
-            }
+            session(['chapter_id' => $chapter_id]);
         } 
         else
         {

@@ -6,13 +6,6 @@
 
 @section('content_body')
 
-<!-- <div id="overlay">
-    <div class="video-convert">
-        <iframe id="ytplayer" type="text/html" width="90%" height="100%"
-            src="http://www.youtube.com/embed/BGyuKpfMB9E" frameborder="0" allowfullscreen></iframe>
-    </div>
-</div> -->
-
 <form action="{{ $module->permalink }}" id="form-table" method="post" autocomplete="off"> @csrf
     <table class="table table-bordered table-hover data-table">
         <thead class="bg-indigo">
@@ -32,7 +25,6 @@
                 <th style="" class="text-white">Chapter</th>
                 <th style="" class="text-white">Course</th>
                 <th style="" class="text-white">Mentor</th>
-                <th style="" class="text-white">Create Date</th>
             </tr>
         </thead>
         <tbody>
@@ -44,25 +36,43 @@
                     TRUE)
                     <div class="form-radio form-radio-flat">
                         <label class="form-check-label">
-                            <input type="radio" class="child-check" name="data_id[{{$val['id']}}]"
-                                id="{{ 'child-'.$val['id'] }}">
+                            <input type="radio" class="child-check" name="data_id[{{$val['chapter_id']}}]"
+                                id="{{ 'child-'.$val['chapter_id'] }}">
                             <i class="input-helper"></i></label>
                     </div>
                     @else
                     {{$no++}}
                     @endif
                 </td>
+                <td>
+                    <select class="form-control text-capitalize parent-option" name="lesson_id[]">
+                        <option selected value="" class="select-chapter">select lesson</option>
+                        @foreach($val['lesson'] as $keys => $values)
+                        <option value="{{$values['id']}}" class="child-option" id="{{'option-'.$values['id']}}">
+                            {{$values['name']}} </option>
+                        @endforeach
+                    </select>
+                </td>
                 <td class="text-capitalize">
-                    <div class="div-video d-flex justify-content-lg-between hover-pointer">
-                        <span class="my-auto" data-video="{{$val['video']}}"> {{$val['name']}} </span>
-                        <img class="div-video-img" src="{{ asset('assets/images/svg/icon.play.svg') }}" alt="play"
-                            style="height:28px">
+                    <div class="dropdown">
+                        <button class="form-control dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> {{$val['chapter_name']}}
+                        </button>
+                        <div class="dropdown-menu w-full" aria-labelledby="dropdownMenuButton1" style="">
+                            <h6 class="dropdown-header">Lessons Video</h6>
+                            <div class="dropdown-divider"></div>
+                            @foreach($val['lesson'] as $keys => $values)
+                            <div class="dropdown-item div-video d-flex justify-content-lg-between hover-pointer">
+                                <span class="my-auto" data-video="{{$values['video']}}"> {{$values['name']}} </span>
+                                <img class="div-video-img" src="{{ asset('assets/images/svg/icon.play.svg') }}"
+                                    alt="play" style="height:28px">
+                            </div>
+                            @endforeach
+                        </div>
                     </div>
                 </td>
-                <td class="text-capitalize">{{$val['chapter_name']}}</td>
                 <td class="text-capitalize">{{$val['course_name']}}</td>
                 <td class="text-capitalize">{{$val['mentor_name']}}</td>
-                <td class="">{{$val['created_at']}}</td>
             </tr>
             @endforeach
         </tbody>

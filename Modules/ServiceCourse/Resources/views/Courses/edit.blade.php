@@ -35,9 +35,11 @@
                                     name="certificate">
                                     <option value="">select certificate</option>
                                     <option value="v1" @if( old('certificate') && old('certificate') !=="" &&
-                                        old('certificate')==='v1' ) selected @elseif($data_edit['certificate'] === 1 ) selected @endif>yes</option>
+                                        old('certificate')==='v1' ) selected @elseif($data_edit['certificate']===1 )
+                                        selected @endif>yes</option>
                                     <option value="v0" @if( old('certificate') && old('certificate') !=="" &&
-                                        old('certificate')==='v0' ) selected @elseif($data_edit['certificate'] === 0 ) selected @endif>no</option>
+                                        old('certificate')==='v0' ) selected @elseif($data_edit['certificate']===0 )
+                                        selected @endif>no</option>
                                 </select>
                                 @error('certificate') {!! required_field($message) !!} @enderror
                             </div>
@@ -67,7 +69,7 @@
                                     <option value="">select type</option>
                                     @foreach(config('items.type') as $key => $val)
                                     <option value="{{$val}}" @if( old('type') && old('type') !=="" && old('type')===$val
-                                        ) selected @elseif($data_edit['type'] === $val ) selected @endif>{{$val}}</option>
+                                        ) selected @elseif($data_edit['type']===$val ) selected @endif>{{$val}}</option>
                                     @endforeach
                                 </select>
                                 @error('type') {!! required_field($message) !!} @enderror
@@ -85,7 +87,8 @@
                                     <option value="">select status</option>
                                     @foreach(config('items.status') as $key => $val)
                                     <option value="{{$val}}" @if( old('status') && old('status') !=="" &&
-                                        old('status')===$val ) selected @elseif($data_edit['status'] === $val ) selected @endif>{{$val}}</option>
+                                        old('status')===$val ) selected @elseif($data_edit['status']===$val ) selected
+                                        @endif>{{$val}}</option>
                                     @endforeach
                                 </select>
                                 @error('status') {!! required_field($message) !!} @enderror
@@ -98,8 +101,8 @@
                             <div class="col-sm-9">
                                 <input type="text" name="price"
                                     class="form-control price-input-Rp @error('price') error-input @enderror"
-                                    value="{{old('price') ?? $data_edit['price'].'00' }}"
-                                    placeholder="Rp 0.00" @if(old('type') || $data_edit['type'] !== "premium") disabled @endif>
+                                    value="{{old('price') ?? $data_edit['price'].'00' }}" placeholder="Rp 0.00"
+                                    @if(old('type') || $data_edit['type'] !=="premium" ) disabled @endif>
                                 @error('price') {!! required_field($message) !!} @enderror
                             </div>
                         </div>
@@ -115,7 +118,8 @@
                                     <option value="">select level</option>
                                     @foreach(config('items.level') as $key => $val)
                                     <option value="{{$val}}" @if( old('level') && old('level') !=="" &&
-                                        old('level')===$val ) selected @elseif($data_edit['level'] === $val ) selected @endif>{{$val}}</option>
+                                        old('level')===$val ) selected @elseif($data_edit['level']===$val ) selected
+                                        @endif>{{$val}}</option>
                                     @endforeach
                                 </select>
                                 @error('level') {!! required_field($message) !!} @enderror
@@ -150,13 +154,42 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">Description</label>
-                    <textarea name="description" class="some-textarea form-control" rows="10">{{old('description') ?: $data_edit['description'] }} </textarea>
+                    <textarea name="description" class="some-textarea form-control"
+                        rows="10">{{old('description') ?: $data_edit['description'] }} </textarea>
                     @error('description') {!! required_field($message) !!} @enderror
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<!-- img courses -->
+
+@if(!empty($img_course))
+<div class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <form class="form-sample" action="{{ $module->permalink.'/deleteImage' }}" id="form-table-image-course"
+                method="post" autocomplete="off" novalidate="novalidate" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="id_img_course" id="input-image-course-id">
+                <input type="hidden" name="img_course" id="input-image-course">
+                <div class="row">
+                    @foreach($img_course as $key => $val)
+                    <div class="col-lg-2 col-md-12 mb-4 image-galery hover-pointer">
+                        <div class="position-relative w-100 h-100" data-id="{{$val['id']}}" data-image="{{$val['image']}}">                            
+                            <img src="{{$val['image']}}" class="w-100 h-100 shadow-1-strong rounded border" alt="" />
+                            <div class="middle-set"> </div>
+                            <i class="mdi mdi-36px mdi-delete-circle-outline text-light"></i>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endif
 
 @endsection
 
@@ -210,7 +243,7 @@ $(document).ready(function() {
                             $('.dropdown_empty').remove()
                             $('.dropdown-menu').append(
                                 '<div class="dropdown-header dropdown_empty">No entry found </div>'
-                                )
+                            )
                         }
                         $('.dropdown-item').remove()
                         for (i = 0; i < resp.data.length; i++) {

@@ -79,6 +79,39 @@ class CoursesController extends Controller
             $_mentors = detail_mentors(session('user_token'), $val['mentor_id']);
             $mentors = $_mentors['status'] === "success" ? $_mentors['data']['name'] : "";
 
+            $_img_course = get_img_courses(session('user_token'), ['course_id' => $val['id']]);
+            $img_course = $_img_course['status'] === "success" ? count($_img_course['data']) : 0;
+
+            $_less_val = 0;
+
+            $_chapter = get_chapters(session('user_token'), ['course_id' => $val['id']]);
+            if($_chapter['status'] === "success")
+            {
+                $chapter = count($_chapter['data']);
+
+                $lesson = array();
+                foreach($_chapter['data'] as $key => $value)
+                {
+                    $_lesson = get_lessons(session('user_token'), ['chapter_id' => $value['id']]);
+                    if($_lesson['status'] === 'success')
+                    {
+                        array_push($lesson, $_lesson['data']);
+                    }
+                }
+
+                if(!empty($lesson))
+                {  
+                    foreach($lesson as $key => $values)
+                    {
+                        $_less_val += count($values);
+                    }
+                }
+            }
+            else
+            {
+                $chapter = 0;
+            }
+
             $item = [
                 'id' => $val['id'],
                 'name' => $val['name'],
@@ -91,9 +124,11 @@ class CoursesController extends Controller
                 'description' =>  cutText($val['description']),
                 'mentor_id' => $val['mentor_id'],
                 'mentors' => $mentors,
+                'chapter' => $chapter,
+                'img_course' => $img_course,
+                'lesson' => $_less_val,
                 'created_at' => Carbon::parse($val['created_at'])->format('M-d-Y h:m A'),
             ];
-
             array_push($_data, $item);
         }
 
@@ -247,7 +282,16 @@ class CoursesController extends Controller
         {
             return redirect()->route('500', ['response' => $data_edit["status"], 'error_code' => $data_edit['http_code'], 'message' => $data_edit['message']]);
         }
+
+        $img_course = get_img_courses(session('user_token'), ['course_id' =>$data_id]);
+        
+        if($img_course["status"] === "error")
+        {
+            return redirect()->route('500', ['response' => $img_course["status"], 'error_code' => $img_course['http_code'], 'message' => $img_course['message']]);
+        }
+        
         $this->viewdata['data_edit'] = $data_edit['data'];
+        $this->viewdata['img_course'] = $img_course['data'];
         $this->viewdata['toolbar_save'] = true;
         $this->viewdata['page_title'] = "edit courses";
 
@@ -412,7 +456,7 @@ class CoursesController extends Controller
         return view('servicecourse::Courses.addImage', $this->viewdata);
     }
 
-    public function saveImage(Request $request)
+    public function saveCourseImage(Request $request)
     {
         $this->page->blocked_page($this->mod_alias, 'create');
 
@@ -473,4 +517,34 @@ class CoursesController extends Controller
         }
         
     }
+
+    public function deleteCourseImage(Request $request)
+    {
+        $this->page->blocked_page($this->mod_alias, 'drop');
+
+        if(!$request->filled('id_img_course')) 
+        {
+            return \redirect($this->module->permalink)->with(['response' => 'error', 'message' => 'Img Course id not found']);
+        }
+
+        $data_id = (int)$request->input('id_img_course');
+
+        /* delete thumbnail */ 
+        if($request->input('img_course'))
+        {
+            $data_image = [ 'image' => $request->input('img_course') ];
+            $delete_media = delete_media(session('user_token'), $data_image);
+        }
+
+        $delete = delete_img_courses(session('user_token'), $data_id);
+
+        if(isset($delete['status']) && $delete['status'] === "error")
+        {
+            return redirect()->route('500', ['response' => $delete['status'], 'error_code' => $delete['http_code'], 'message' => $delete['message']]);
+        }
+
+        return \redirect($this->module->permalink.'/edit')->with(['response' => 'success', 'message' => 'Courses image has been deleted ']);
+
+    }
+
 }

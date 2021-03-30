@@ -77,8 +77,8 @@ Route::namespace('\Modules\ServiceCourse\Http\Controllers')->middleware('auth_us
         Route::post('/delete', 'CoursesController@delete');
         /*course image*/
         Route::get('/image', 'CoursesController@addImage');
-        Route::post('/saveImage', 'CoursesController@saveImage');
-        Route::delete('/deleteImage', 'CoursesController@deleteImage');
+        Route::post('/saveImage', 'CoursesController@saveCourseImage');
+        Route::post('/deleteImage', 'CoursesController@deleteCourseImage');
     });
 
     route::prefix('/chapters')->group(function() {

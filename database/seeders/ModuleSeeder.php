@@ -115,6 +115,16 @@ class ModuleSeeder extends Seeder
                 'mod_order' => 1,
                 'published' => 'y'
             ],
+            [
+                'modid' => 11,
+                'parent_id' => 3,
+                'mod_name' => 'Orders',
+                'mod_alias' => 'orders',
+                'mod_permalink' => '/orders',
+                'mod_icon' => null,
+                'mod_order' => 1,
+                'published' => 'y'
+            ],
         ]);
     }
 }

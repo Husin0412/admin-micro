@@ -452,6 +452,23 @@ function delete_chapters($token, $id) {
 }
 
 /*img course*/
+function get_img_courses($token, $request = null) {
+    $url = env('SERVICE_GATEWAY_URL') . "image-courses";
+
+    try {
+        $response = Http::withHeaders(['Authorization' => $token ])->get($url, $request);
+        $data = $response->json();
+        $data['http_code'] = $response->getStatusCode();
+        return $data;
+    } catch (\Throwable $th) {
+        return [
+            'status' => 'error',
+            'http_code' => 500,
+            'message' => 'service image course unavailable'
+        ];
+    }
+} 
+
 function create_img_courses($token, $request) {
     $url = env('SERVICE_GATEWAY_URL') . "image-courses";
 
@@ -469,11 +486,11 @@ function create_img_courses($token, $request) {
     }
 } 
 
-function delete_img_courses($token, $request) {
-    $url = env('SERVICE_GATEWAY_URL') . "image-courses";
+function delete_img_courses($token, $id) {
+    $url = env('SERVICE_GATEWAY_URL') . "image-courses/$id";
 
     try {
-        $response = Http::withHeaders(['Authorization' => $token ])->delete($url, $request);
+        $response = Http::withHeaders(['Authorization' => $token ])->delete($url);
         $data = $response->json();
         $data['http_code'] = $response->getStatusCode();
         return $data;

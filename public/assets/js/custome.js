@@ -102,6 +102,7 @@ $('.div-video').hover(function(){
     })
     $('.overlay').click(function() {
         $(this).fadeOut("slow");
+        $('iframe').remove()
     })
 }) 
 
@@ -218,6 +219,43 @@ $('.actions > .btn-details').click(function() {
         return
     }
     form.attr('action', $this.data('link')).submit();
+})
+
+$('.image-galery').click(function() {
+    var $this=$(this),child=$this.children(),id=child[0].dataset.id,image=child[0].dataset.image, form=$('#form-table-image-course');
+
+    var notice = new PNotify({
+        title: 'Are you sure?',
+        text: 'want to delete this image.',
+        icon: 'mdi mdi-18px mdi-comment-alert-outline',
+        styling: 'bootstrap3',
+        width: '330',
+        hide: false,
+        confirm: {
+            confirm: true
+        },
+        buttons: {
+            closer: false,
+            sticker: false
+        },
+        history: {
+            history: false
+        },
+        addclass: 'stack-modal',
+        stack: {'dir1': 'down', 'dir2': 'right', 'modal': true}
+    });
+
+    $('.alert-warning').addClass('alert-primary-custome')
+    $('.btn-default').addClass('text-white-custome')
+
+    notice.get().on('pnotify.confirm', function(){
+        $('#input-image-course-id').val(id)
+        $('#input-image-course').val(image)
+        form.submit();
+    })
+    notice.get().on('pnotify.cancel', function(){
+        notice.remove();
+    })
 })
 
 /*view or not password*/ 
