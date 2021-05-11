@@ -213,7 +213,7 @@ return [
         'vendor' => 'nwidart',
         'author' => [
             'name' => 'Nicolas Widart',
-            'email' => 'n.widart@gmail.com',
+            'email' => 'n.widart@gmail.com', 
         ],
     ],
 
@@ -234,6 +234,7 @@ return [
     ],
     /*
     |--------------------------------------------------------------------------
+    
     | Choose what laravel-modules will register as custom namespaces.
     | Setting one to false will require you to register that part
     | in your own Service Provider class.
